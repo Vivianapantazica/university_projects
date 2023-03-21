@@ -1,0 +1,96 @@
+/*PANTAZICĂ Viviana-Ștefania 315CB*/
+
+        Structurile pe care le-am folosit in tema sunt:
+
+//data structure to store a book
+typedef struct carte
+{
+    char* titlu;
+    char* autor;
+    int rating;
+    int nr_pag;
+} TCarte, *TLista;
+
+// Data structure to store a Trie node
+typedef struct Trie
+{
+    int isLeaf;
+    void* info;            
+    struct Trie* key[ALPHABET_SIZE];
+} TTrie;
+
+Cei trei arbori pe care ii folosesc sunt: T1, T2 si T3.
+Pentru a intelege legatura dintre ei, fac o mica diagrama:
+
+T1 - contine toate cartile din baza de date, are ca informatie a fiecarui ultim nod structura de tip TCarte.
+T2 - contine toate numele autorilor din baza de date, fiecare frunza pointand catre un T3 corespunzator.
+T3 - contine toate cartile scrise de un autor, fiecare frunza are ca info o structura de tip TCarte.
+
+    T2                                 T1
+     |                                  |
+     v                                  v
+T3  .......     T3               (TCarte*)info
+|               |
+v               v
+(TCarte*)info   .....
+
+
+
+        FUNCTIA MAIN
+In main, am extras prima data argumentele din linia de comanda, am deschis fisierele de input si de output
+si am inceput citirea din fisierele input.txt a datelor. Am retinut in variabila operatie, operatia pe care 
+o aveam de realizat si, in functie de aceasta, am prelucrat datele citite din fisier. 
+
+In cazul operatiilor de autocomplete, am retinut prefixul drept cuvantul care se termina cu caracterul "~" si
+am apelat aproximativ la fel functiile de cautare deja implementate.
+
+Urmeaza sa descriu, pe rand, modul de functionare a fiecarei functii:
+
+1.  TTrie* createNode() - creeaza si initializeaza un nou nod Trie, setand campul isLeaf la valoarea 1.
+
+2.  void insert(struct Trie *head, char* str, void* info, char alphabet_array[])
+    Inserarea in Trie se realizeaza nerecursiv.
+    Functia primeste un string str pe care trebuie sa-l adauge la locul potrivit in structura.
+    Se parcurge str caracter cu caracter si se compara cu fiecare caracter din vectorul alfabet initializat de noi.
+    Alfabetul pe care il vom folosi are o forma particulara:
+            char alphabet_array[68] = {"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-'?! "};
+    Se parcurg pe rand nodurile structurii Trie, iar in cazul in care nu exista o legatura, se creeaza un nou nod
+si se reface legatura.
+    Dupa parcurgerea string-ului, mai ramane de adaugat informatia in nodurile frunza ale structurii.
+    Se returneaza valoarea campului isLeaf din utlimul nod al structurii: in cazul in care este frunza- se returneaza 1;
+ceea ce inseamna ca inserarea a reusit. In caz contrar, se returneaza zero.
+
+3.  void insertT2(struct Trie *head, char* str, struct Trie *arb, char v[]);
+    Inserarea in Trieul T2 se realizeaza urmand tiparul inserarii simple, mai exact:
+    se insereaza un string care reprezinta titlul unei carti ca si cheie pentru T2,
+    iar apoi se introduce adresa lui T3 pe campul info.
+
+
+4.  int search(struct Trie* head, char* str, char alphabet_array[], FILE* out)
+    Functia de cautare se bazeaza pe acelasi principiu al parcurgerii fiecarui caracter din string-ul primit ca parametru
+si verificarea daca acesta coincide cu campul key[i], pentru un i curent, al fiecarui nod al structurii. 
+    La iesirea din for, suntem siguri ca string-ul a fost gasit in Trie, ceea ce inseamna ca putem face afisarea mesajului 
+de succes si a celorlalte informatii care ne sunt cerute in cerinta.
+
+5.  int list_author(struct Trie* head, char* str, char alphabet_array[], char* output_string, FILE* out)
+    Functia aceasta este aproape identica cu cea de cautare (search), numai ca in main va fi apelata avand ca parametru
+numele unui autor, iar mesajul de succes si informatiile afisate vor fi, desigur, altele. Se foloseste functia display
+pentru afisarea titlurilor.
+
+5.  int search_by_author(struct Trie* head, char* str1, char* str2, char alphabet_array[], FILE* out)
+    Search_by_author functioneaza pe acelasi principiu ca cel explicat mai sus, in cadrul functiei search.
+    Diferenta este ca functia aceasta va primi doi parametri de tip string, prmul reprezentand numele autorului care trebuie
+cautat in T2, iar in cazul in care este gasit, se va compara informatia din ultimul nod cu str2, care este cartea data ca parametru.
+In caz de egalitate, inseamna ca a fost gasita cartea str2 scrisa de autorul str1 si se vor afisa informatiile si mesajele cerute.
+
+6.  int search_by_author_prefixed(struct Trie* head, char* str, char alphabet_array[], char* output_string, FILE* out)
+    Este identica in afara de mesajul pe care il printeaza in caz de succes cu functia search_by_author.
+    O vom apela in main in cazul cerintei de autocomplete, cand prefixul de cautat face parte din titlul unei carti, ci nu din numele
+autorului.
+
+7.  void display(struct Trie* root, char str[], int level, char alphabet_array[], FILE* out)
+    Este o functie de afisare recursiva a unui trie, care se realizeaza pe constructia element cu element a string-ului care trebuie afisat.
+
+
+
+
