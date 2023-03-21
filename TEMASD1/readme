@@ -1,0 +1,95 @@
+/*PANTAZICĂ Viviana-Ștefania 315CB*/
+
+    FUNCTII DE PRELUCRARE A LISTEI DUBLU INLANTUITE CIRCULARE
+    FUNCTII DE PRELUCRARE A TABELEI HASH
+
+TL2* InitializareLDIC();
+
+    Initializeaza o lista, pune NULL in campurile fiecarei celule.
+
+void InserareLDIC(TL2* aL, void* ae);
+
+    Insereaza un element care are campul info = ae intr-o lista;
+    Primul test este de verificare daca lista e vida;
+    Al doilea test verifica daca mai exista elementul de inserat in lista sau nu;
+    In caz contrat, acesta se insereaza, respectand ordinea lexicografica in functie de campul cheie (key);
+    Pentru a realiza acest lucru, se face o parcurgere a listei atata timp cat elementele au cheia mai mica decat
+cea a elementului de inserat, in momentul in care se gaseste un element cu cheia mai mare, elementul de inserat se va
+insera inaintea acestuia.
+    Functiile auxiliare sunt CmpDifera - verifica daca doua elemente au cheile diferite - si CmpLexicografic - compara
+cheile a doua elemente pentru a ajuta la inserarea lor in ordine lexicografica
+
+void DistrugeLDIC(TL2* aL);
+    Distrugerea listei se face prin ruperea legaturilor si eliberarea memoriei.
+
+size_t LungimeLDIC(TL2* a);
+    Numara rand pe rand celulele dintr-o lista, returnand, astfel, lungimea ei.
+
+void afisareLDIC(TL2* aL);
+    Afiseaza valorile (value) dintr-o lista aL data.
+
+TH* InitializareTH(int M);
+    Realizeaza initializarea tabelei Hash, fiecare element din vectorul de liste pointand catre NULL.
+
+int codHash(void * element, int M);
+    Calculeaza codul hash al unui element, prin impartirea sumei caracterelor din cheia acestuia la 
+numarul de bucket-uri din tabel (M).
+
+void AfisareTH(TH* ah, FILE* out);
+    Afiseaza toate valorile dintr-o tabela Hash, la apelarea comenzii de "print".
+
+int FindTH(TH* h, void* key, int M);
+    Cauta in tabela Hash un element care are o cheie anume si returneaza 1 in cazul in care elementul 
+a fost gasit si 0 in caz contrar. Cautarea se face prin parcurgerea listei specifice codului hash al elementului
+de cautat. 
+
+void InserareTH(TH*h, void* ae, int M);
+    Inserarea unui element in tabela Hash se realizeaza cu ajutorul functiei de inserare in lista dublu inlantuita
+circulara (InserareLDIC). In primul rand, daca variabila gasit va avea valoarea 1, atunci inseamna ca elementul ar 
+exista deja in tabela, deci inserarea nu va mai avea loc. Altfel, atribui campurilor key si value din adresa valorile
+primite ca parametri, calculez codul hash al cheii key si retin in variabila element adresa bucket-ului in care se afla 
+adresa a caror date le-am primit ca parametri. Daca aceasta adresa este nula (element), se realizeaza mai intai initializarea
+listei si apoi adaugarea primului element, altfel se apeleaza direct InserareLDIC.
+
+void DistrugeTH(TH** ah, TF fe);
+    Distrugerea tabelei hash se realizeaza prin ruperea legaturilor si eliberarea memoriei.
+
+void PrintBucket(TH* ah, int nr, FILE* out);
+    Asemanatoare functiei AfisareTH, doar ca de aceasta data se printeaza valorile dintr-o singura lista specificata prin indexul
+primit ca parametru.
+
+void* GetTH(TH* h, void* key, int M);
+    Cauta in tabela Hash un element care are o cheie anume si returneaza valoarea corespunzatoare acestuia (value) in cazul 
+in care elementul a fost gasit si NULL in caz contrar. Cautarea se face prin parcurgerea listei specifice codului hash al elementului
+de cautat.
+
+    void RemoveTH(TH* h, void* ae, int M);
+    Parcurgem lista specifica hash-ului elementului primit si, la gasirea acestuia, il eliminam. Avem grija la cazul in care elementul care
+trebuie eliminat este primul din lista.
+
+        TIPURILE DE DATE SI STRUCTURILE FOLOSITE
+
+typedef struct // structura tabelei hash
+{
+    size_t M;
+    TFHash fh;
+    TL2 *v;
+} TH;
+
+typedef struct { //structura unei celule 
+	char* key;
+	char* value;
+} TAdresa;
+
+typedef struct celula2
+{
+  void* info;           // adresa informatie 
+  struct celula2 *urm;  //   adresa urmatoarei celule
+  struct celula2 *pre;  //   adresa celulei anterioare 
+} TCelula2, *TL2;       //   tipurile celula, lista
+
+        FUNCTIA MAIN
+In main, am extras prima data argumentele din linia de comanda, am deschis fisierele de input si de output
+si am inceput citirea din fisierele hash.in a datelor. Am retinut in variabila operatie, operatia pe care 
+o aveam de realizat si, in functie de aceasta, am prelucrat datele citite din fisier. Pentru print, am apelat 
+AfisareTH, pentru print_bucket, PrintBucket, pentru put, InserareTH, pentru find, FindTH, iar pentru Get, GetTH.
