@@ -1,0 +1,19 @@
+/* PANTAZICA VIVIANA-STEFANIA, GRUPA 324CB */
+
+Task1 - kClique rezolvata folosind backtracking
+    - Primul pas a fost costruirea grafului:
+    Pentru a realiza acest lucru, am citit datele din fisiere intr-o matrice de muchii (edges).
+    In functie de primele 2 coloane ale acestei matrici (reprezentand cele 2 capete ale unei muchii),
+    am construit graful graph, setand 1 pe pozitiile pe care se afla un nod. 
+
+    - Functia auxiliara is_clique: primeste ca parametru dimensiunea unui subgraf si verifica daca 
+    acesta este o clica.
+    Practic, se parcurge subgraful nod cu nod si daca pozitia acestuia a fost retinuta in vectorul store,
+    dar valoarea lui este nesetata (este 0), atunci se returneaza 0.
+
+    - Functia findCliques: verifica daca in graful dat se gaseste o clica de dimensiune k.
+    Functia este recursiva, autoapelandu-se cat timp nu se gaseste o clica sau clica gasita este de
+    o dimensiune mai mica decat cea trimisa ca parametru (k).
+    Vectorul d retine care nod a fost setat si in functie de acesta se construieste si vectorul store.
+    La finalul parcurgerii, se va returna 0, deoarece inseamna ca in graful dat nu exista nicio clica de 
+    dimensiune k.  
