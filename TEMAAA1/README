@@ -1,0 +1,45 @@
+/* PANTAZICA VIVIANA-STEFANIA, GRUPA 324CB */
+
+Task 1
+
+1.1.  Am marcat cu y inceputul sirului, caracter pe care l-am folosit pentru a ma ghida in parcurgeri.
+Cand ajungeam la finalul sirului, copiam litera de la final, marcand-o cu X, dupa care ma intorceam la inceput, 
+unde puneam in stanga lui y litera copiata anterior. Procedeul se repeta pana cand in dreapta lui y va exista X.
+Am folosit in principiu functiile si notatiile de la laborator.
+
+1.2. Am considerat 5 reprezentat in binar = 101
+Am copiat acest numar dupa separator, in stanga cuvantului dat ca input.
+Asadar sirul arata astfel: aaaaac101, unde a apartine {0,1}.
+Am comparat alternativ fiecare cifra a celor doua numere, incepand de la dreapta spre stanga.
+De exemplu, prima cifra de la finalul cuvantului (1) cu prima cifra din stanga lui c si asa mai departe.
+In functie de ce cuvant se sfarsea primul, stiam ca acesta era mai mic.
+Daca cifrele erau egale, le marcam cu X. In momentul cand apare prima cifra care nu este identica, mergem intr-o functie diferita,
+pentru a marca faptul ca nr este mai mic / mai mare decat 5.
+La final, ștergem conținutul benzii și scriem 0 dacă numărul este mai mic decât 5, 1 altfel.
+
+1.3. In functie de ce primesc la input, am definit 5 stari care sa ma ajute sa realizez adunarea cu 3 (reprezentat ca 0011).
+Am luat in considerare posibilitatea de a avea carry atat in mijlocul cuvantului, cat si la inceput.
+
+1.4. Implementarea algoritmului de double dabber.
+Am construit intai sirul de zerouri din input. Am parcurs sirul si pentru fiecare grupare de 3 biti am adaugat la inceput
+o grupare de 4 biti de 0. Mentionez faptul ca m-am folosit de un delimitator intre gruparile respective din stanga (care reprezinta cifrele BCD)
+si cele din dreapta (nr dat la input). Am shiftat cate o cifra pe rand in stanga si am verificat daca fiecare cifra BCD este >= 5, caz in care
+adunam la gruparea respectiva 3 si continuam shiftarea. Algoritmul se termina in momentul in care cuvantul din stanga separatorului a devenit full X.
+(Precizez ca pentru a realiza shiftarea am marcat bitii deja shiftati cu X). Din cauza faptului ca verificarea se face inca o data si dupa shiftare,
+am scazut din cuvintele >5 pe 3, deoarece acesta era adaugat inutil. De asemenea, am verificat si cazul in care adunarea lui 3 la prima cifra BCD depasea
+4 cifre, fiind necesar un bit de carry, pe care l-am adaugat ulterior, alaturi de bitii de 0 necesari. 
+
+Task 2
+
+2.1. Am folosit algoritmul de la taskul 1.1., doar ca, inainte de finalizarea acestuia si intrarea in starea accept, am sters X-urile din dreapta,
+am shiftat in stanga tot continutul outputului != X si am pus, pentru fiecare X sters din dreapta, un X in stanga outputului.
+
+2.2. In functie de ce primesc la input, am definit 3 stari care sa ma ajute sa realizez scaderea cu 3 (a, b, c).
+Acestea reprezinta ultimii 3 biti dintr-un numar si in functie de valoarea acestora, exista o succesiune potrivita care sa realizeze scaderea.
+Functia final se ocupa cu "imprumutatul" in cazul in care trebuie sa trecem la bitii urmatori pana ce gasim unul != 0 care sa faca posibila scaderea.
+Functia f cauta primul caracter nenul, iar functia fr sterge toate zerourile care exista inainte de aparitia primului 1 din output.
+
+2.3. Consideram sirul din input, in dreapta caruia adaugam un separator. In stanga separatorului, din 4 in 4 grupe verificam daca bitul respectiv = 1.
+Acest lucru semnifica faptul ca acea cifra BCD este > 1000 (8). Pentru fiecare grupa care depaseste 8, scadem 3 si shiftam tot inputul la dreapta cu o pozitie,
+completand in stanga cu zerouri pentru a mentine cifrele BCD complete. Daca in stanga separatorului exista doar zerouri, atunci algoritmul se poate incheia.
+Mai raman de sters doar zerourile respetive si separatorul.
